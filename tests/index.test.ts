@@ -127,4 +127,90 @@ describe("@plasius/ai-moderation", () => {
     expect(result.requiresHumanReview).toBe(true);
     expect(result.reasonCodes).toContain("redaction-disabled-escalated");
   });
+
+  it("routes low-signal high-severity findings to warnings", () => {
+    expect(
+      resolveAiModerationDecision({
+        text: "ambiguous report",
+        correlationId: "corr-high-low-signal",
+        channel: "forum",
+        requestedDecision: "block",
+        featureFlags: {
+          [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
+        },
+        findings: [
+          {
+            code: "possible-harm",
+            message: "Low signal high-severity classifier output",
+            severity: "high",
+            signalScore: 0.2,
+          },
+        ],
+      })
+    ).toMatchObject({
+      resolvedDecision: "warn",
+      reasonCodes: ["low-signal-high-severity-warn"],
+    });
+  });
+
+  it("quarantines medium-severity block requests for review", () => {
+    expect(
+      resolveAiModerationDecision({
+        text: "needs review",
+        correlationId: "corr-medium",
+        channel: "ugc",
+        requestedDecision: "block",
+        featureFlags: {
+          [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
+        },
+        findings: [
+          {
+            code: "policy-medium",
+            message: "Medium severity finding",
+            severity: "medium",
+            signalScore: 0.5,
+          },
+        ],
+      })
+    ).toMatchObject({
+      resolvedDecision: "quarantine",
+      reasonCodes: ["medium-severity-quarantined-for-review"],
+    });
+  });
+
+  it("passes clean moderated text without redaction", () => {
+    expect(
+      resolveAiModerationDecision({
+        text: "hello world",
+        correlationId: "corr-pass",
+        channel: "chat",
+        featureFlags: {
+          [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
+        },
+      })
+    ).toMatchObject({
+      resolvedDecision: "allow",
+      reasonCodes: ["moderation-pass"],
+      redactedText: undefined,
+    });
+  });
+
+  it("uses human review when redaction is disabled and review is enabled", () => {
+    expect(
+      resolveAiModerationDecision({
+        text: "username: Zephod",
+        correlationId: "corr-redact-human-review",
+        channel: "dm",
+        requestedDecision: "redact",
+        featureFlags: {
+          [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
+          [AI_MODERATION_FEATURE_FLAGS.humanReview]: true,
+        },
+      })
+    ).toMatchObject({
+      resolvedDecision: "human-review",
+      reasonCodes: ["redaction-disabled-escalated"],
+      redactedText: undefined,
+    });
+  });
 });
