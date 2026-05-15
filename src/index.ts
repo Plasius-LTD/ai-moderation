@@ -225,6 +225,12 @@ export function resolveAiModerationDecision(
     reasonCodes.push("medium-severity-quarantined-for-review");
   } else if (
     requestedDecision === "redact" &&
+    !redactionEnabled
+  ) {
+    resolvedDecision = humanReviewEnabled ? "human-review" : "escalate";
+    reasonCodes.push("redaction-disabled-escalated");
+  } else if (
+    requestedDecision === "redact" &&
     redactionEnabled &&
     (findings.length > 0 || /\w{2,}/u.test(text))
   ) {
@@ -234,7 +240,7 @@ export function resolveAiModerationDecision(
   }
 
   const redactedText =
-    resolvedDecision === "redact" || requestedDecision === "redact"
+    resolvedDecision === "redact" && redactionEnabled
       ? redactionText(text, input.redactionTokens)
       : undefined;
 

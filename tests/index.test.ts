@@ -109,4 +109,22 @@ describe("@plasius/ai-moderation", () => {
       reasonCodes: ["redaction-applied"],
     });
   });
+
+  it("does not return redacted text when redaction is disabled", () => {
+    const result = resolveAiModerationDecision({
+      text: "username: Zephod",
+      correlationId: "corr-redact-disabled",
+      channel: "dm",
+      requestedDecision: "redact",
+      featureFlags: {
+        [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
+      },
+      redactionTokens: ["Zephod"],
+    });
+
+    expect(result.resolvedDecision).toBe("escalate");
+    expect(result.redactedText).toBeUndefined();
+    expect(result.requiresHumanReview).toBe(true);
+    expect(result.reasonCodes).toContain("redaction-disabled-escalated");
+  });
 });
