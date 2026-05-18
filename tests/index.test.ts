@@ -101,7 +101,7 @@ describe("@plasius/ai-moderation", () => {
           [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
           [AI_MODERATION_FEATURE_FLAGS.redaction]: true,
         },
-        redactionTokens: ["Zephod"],
+        redactionTokens: [" ", "Zephod"],
       })
     ).toMatchObject({
       resolvedDecision: "redact",
@@ -211,6 +211,70 @@ describe("@plasius/ai-moderation", () => {
       resolvedDecision: "human-review",
       reasonCodes: ["redaction-disabled-escalated"],
       redactedText: undefined,
+    });
+  });
+
+  it("escalates critical findings when human review is disabled", () => {
+    expect(
+      resolveAiModerationDecision({
+        text: "critical report",
+        correlationId: "corr-critical-no-review",
+        channel: "forum",
+        featureFlags: {
+          [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
+        },
+        findings: [
+          {
+            code: "critical-policy",
+            message: "Critical finding without review flag",
+            severity: "critical",
+          },
+        ],
+      })
+    ).toMatchObject({
+      resolvedDecision: "escalate",
+      requiresHumanReview: true,
+      reasonCodes: ["critical-finding-escalated"],
+    });
+  });
+
+  it("treats malformed finding severity as non-blocking", () => {
+    expect(
+      resolveAiModerationDecision({
+        text: "malformed classifier output",
+        correlationId: "corr-malformed-severity",
+        channel: "ugc",
+        featureFlags: {
+          [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
+        },
+        findings: [
+          {
+            code: "malformed-severity",
+            message: "Unexpected severity from an upstream classifier",
+            severity: "unexpected" as never,
+          },
+        ],
+      })
+    ).toMatchObject({
+      resolvedDecision: "allow",
+      reasonCodes: ["moderation-pass"],
+    });
+  });
+
+  it("preserves caller reason codes without adding a pass reason", () => {
+    expect(
+      resolveAiModerationDecision({
+        text: "manual review note",
+        correlationId: "corr-existing-reason",
+        channel: "chat",
+        featureFlags: {
+          [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
+        },
+        reasonCodes: ["upstream-reviewed"],
+      })
+    ).toMatchObject({
+      resolvedDecision: "allow",
+      reasonCodes: ["upstream-reviewed"],
     });
   });
 });
