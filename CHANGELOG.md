@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - Added feature-flag-gated moderation decision contracts with audit metadata and human-review escalation paths.
 
 - **Fixed**
+  - Release automation now prepares version/changelog updates on a release PR before publishing from protected `main`.
   - (placeholder)
 
 - **Security**
