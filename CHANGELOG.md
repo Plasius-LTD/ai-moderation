@@ -7,16 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [Unreleased]
 
 - **Added**
-  - Added moderation decision outcomes, finding models, and redaction/escation policy resolution helpers.
+  - (placeholder)
 
 - **Changed**
-  - Added feature-flag-gated moderation decision contracts with audit metadata and human-review escalation paths.
+  - (placeholder)
 
 - **Fixed**
   - (placeholder)
 
 - **Security**
-  - Redaction requests now escalate without returning transformed text when the redaction flag is disabled.
+  - (placeholder)
 
 ## [0.1.2] - 2026-05-13
 
