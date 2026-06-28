@@ -1,6 +1,6 @@
 {
   "name": "@plasius/ai-moderation",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Forum, chat, profanity, and enforcement moderation contracts for Plasius AI governance.",
   "type": "module",
   "sideEffects": false,
