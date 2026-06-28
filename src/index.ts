@@ -101,6 +101,35 @@ function normalizeText(value: string): string {
   return value.trim();
 }
 
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function isAiModerationSeverity(value: unknown): value is AiModerationSeverity {
+  return (
+    typeof value === "string" &&
+    AI_MODERATION_SEVERITIES.includes(value as AiModerationSeverity)
+  );
+}
+
+function isValidSignalScore(value: unknown): value is number | undefined {
+  return value === undefined || (typeof value === "number" && Number.isFinite(value));
+}
+
+function isAiModerationFinding(value: unknown): value is AiModerationFinding {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+
+  const finding = value as Partial<AiModerationFinding>;
+  return (
+    isNonEmptyString(finding.code) &&
+    isNonEmptyString(finding.message) &&
+    isAiModerationSeverity(finding.severity) &&
+    isValidSignalScore(finding.signalScore)
+  );
+}
+
 function clampConfidence(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
@@ -190,6 +219,29 @@ export function resolveAiModerationDecision(
         channel: input.channel,
         evaluatedAtUtc: nowIsoString(),
         decision: "allow",
+      },
+    };
+  }
+
+  // Fail closed when upstream classifier output is malformed.
+  if (findings.some((finding) => !isAiModerationFinding(finding))) {
+    const resolvedDecision = humanReviewEnabled ? "human-review" : "escalate";
+    reasonCodes.push("moderation-invalid-finding");
+
+    return {
+      requestedDecision,
+      resolvedDecision,
+      reasonCodes,
+      requiresHumanReview: true,
+      enabledFeatureFlags,
+      findings,
+      audit: {
+        correlationId: input.correlationId,
+        requestId: input.requestId,
+        actorId: input.actorId,
+        channel: input.channel,
+        evaluatedAtUtc: nowIsoString(),
+        decision: resolvedDecision,
       },
     };
   }

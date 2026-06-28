@@ -15,10 +15,33 @@ npm install @plasius/ai-moderation
 ## Usage
 
 ```ts
-import { packageDescriptor } from "@plasius/ai-moderation";
+import {
+  AI_MODERATION_FEATURE_FLAGS,
+  resolveAiModerationDecision,
+} from "@plasius/ai-moderation";
 
-console.log(packageDescriptor.packageName);
+const result = resolveAiModerationDecision({
+  text: "hello world",
+  correlationId: "corr-123",
+  channel: "chat",
+  featureFlags: {
+    [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
+  },
+});
+
+console.log(result.resolvedDecision);
 ```
+
+## Moderation Validation
+
+When moderation is enabled, malformed classifier findings fail closed instead of
+returning `allow`. Unknown severities, non-finite `signalScore` values, or other
+invalid finding payload fields return `moderation-invalid-finding` and resolve to:
+
+- `human-review` when `ai.moderation.human-review.enabled` is on
+- `escalate` otherwise
+
+The original findings are preserved in the result for audit visibility.
 
 ## Development
 
