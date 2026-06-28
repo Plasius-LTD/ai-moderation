@@ -238,7 +238,7 @@ describe("@plasius/ai-moderation", () => {
     });
   });
 
-  it("treats malformed finding severity as non-blocking", () => {
+  it("escalates malformed finding severity when human review is disabled", () => {
     expect(
       resolveAiModerationDecision({
         text: "malformed classifier output",
@@ -256,8 +256,35 @@ describe("@plasius/ai-moderation", () => {
         ],
       })
     ).toMatchObject({
-      resolvedDecision: "allow",
-      reasonCodes: ["moderation-pass"],
+      resolvedDecision: "escalate",
+      requiresHumanReview: true,
+      reasonCodes: ["moderation-invalid-finding"],
+    });
+  });
+
+  it("routes malformed finding signal scores to human review when enabled", () => {
+    expect(
+      resolveAiModerationDecision({
+        text: "malformed classifier output",
+        correlationId: "corr-malformed-signal",
+        channel: "ugc",
+        featureFlags: {
+          [AI_MODERATION_FEATURE_FLAGS.moderation]: true,
+          [AI_MODERATION_FEATURE_FLAGS.humanReview]: true,
+        },
+        findings: [
+          {
+            code: "malformed-signal",
+            message: "Unexpected signal score from an upstream classifier",
+            severity: "high",
+            signalScore: Number.NaN,
+          },
+        ],
+      })
+    ).toMatchObject({
+      resolvedDecision: "human-review",
+      requiresHumanReview: true,
+      reasonCodes: ["moderation-invalid-finding"],
     });
   });
 

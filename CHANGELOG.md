@@ -16,7 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - (placeholder)
 
 - **Security**
-  - (placeholder)
+  - Moderation now fails closed for malformed classifier findings instead of returning `allow` or `moderation-pass`.
 
 ## [0.1.6] - 2026-06-28
 
