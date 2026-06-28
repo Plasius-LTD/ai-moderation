@@ -16,6 +16,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - (placeholder)
 
 - **Security**
+  - (placeholder)
+
+## [0.1.7] - 2026-06-28
+
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
   - Moderation now fails closed for malformed classifier findings instead of returning `allow` or `moderation-pass`.
 
 ## [0.1.6] - 2026-06-28
@@ -101,3 +115,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 [0.1.4]: https://github.com/Plasius-LTD/ai-moderation/releases/tag/v0.1.4
 [0.1.5]: https://github.com/Plasius-LTD/ai-moderation/releases/tag/v0.1.5
 [0.1.6]: https://github.com/Plasius-LTD/ai-moderation/releases/tag/v0.1.6
+[0.1.7]: https://github.com/Plasius-LTD/ai-moderation/releases/tag/v0.1.7
