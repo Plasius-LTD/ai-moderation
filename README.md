@@ -1,5 +1,13 @@
 # @plasius/ai-moderation
 
+[![npm version](https://img.shields.io/npm/v/@plasius/ai-moderation.svg)](https://www.npmjs.com/package/@plasius/ai-moderation)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Plasius-LTD/ai-moderation/ci.yml?branch=main&label=build&style=flat)](https://github.com/Plasius-LTD/ai-moderation/actions/workflows/ci.yml)
+[![coverage](https://img.shields.io/codecov/c/github/Plasius-LTD/ai-moderation)](https://codecov.io/gh/Plasius-LTD/ai-moderation)
+[![License](https://img.shields.io/github/license/Plasius-LTD/ai-moderation)](./LICENSE)
+[![Code of Conduct](https://img.shields.io/badge/code%20of%20conduct-yes-blue.svg)](./CODE_OF_CONDUCT.md)
+[![Security Policy](https://img.shields.io/badge/security%20policy-yes-orange.svg)](./SECURITY.md)
+[![Changelog](https://img.shields.io/badge/changelog-md-blue.svg)](./CHANGELOG.md)
+
 Forum, chat, profanity, and enforcement moderation contracts for Plasius AI governance.
 
 ## Scope
