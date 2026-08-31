@@ -18,6 +18,9 @@ describe("npm release trust boundary", () => {
     expect(ciWorkflow).toContain('["ubuntu-latest"]');
     expect(ciWorkflow).toContain('["self-hosted","Linux","X64"]');
     expect(ciWorkflow).toContain("needs: trusted_head");
+    expect(
+      ciWorkflow.match(/uses: \.\/\.github\/actions\/package-ci/gu),
+    ).toHaveLength(2);
     expect(ciWorkflow).not.toContain("CI_RUNNER_LABELS");
   });
 
