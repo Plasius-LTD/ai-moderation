@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+- **Added**
+  - (placeholder)
+
+- **Changed**
+  - (placeholder)
+
+- **Fixed**
+  - (placeholder)
+
+- **Security**
+  - (placeholder)
+
+## [0.1.9] - 2026-09-28
+
 - Limit remote npm cache exports to disposable GitHub-hosted CI jobs so persistent runner cleanup cannot delay validated releases.
 
 - Refresh npm dependency lockfile to current supported stable versions (weekly maintenance, 2026-09-28).
@@ -142,3 +156,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 [0.1.6]: https://github.com/Plasius-LTD/ai-moderation/releases/tag/v0.1.6
 [0.1.7]: https://github.com/Plasius-LTD/ai-moderation/releases/tag/v0.1.7
 [0.1.8]: https://github.com/Plasius-LTD/ai-moderation/releases/tag/v0.1.8
+[0.1.9]: https://github.com/Plasius-LTD/ai-moderation/releases/tag/v0.1.9
