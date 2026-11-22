@@ -72,7 +72,8 @@
     "rimraf": "^6.1.4",
     "tsup": "^9.0.0",
     "typescript": "^6.0.3",
-    "vitest": "^5.1.1"
+    "vitest": "^5.1.1",
+    "vite": "^8.3.8"
   },
   "publishConfig": {
     "access": "public"
